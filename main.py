@@ -1,6 +1,10 @@
 import requests
 import time
 import cfscrape
+import threading
+from multiprocessing import Process
+import os
+
 #USmint bot V3 lets gooooo
 def atc(ses, pid):
     print("Adding to cart...")
@@ -205,5 +209,15 @@ def task(pid):
 if __name__ == '__main__':
     pid = '20RG'
     monitor(pid)
-    task(pid)
+    jobs = []
+    threads = 5
+    for i in range(0, int(threads)):
+        jobs.append(threading.Thread(target=task(pid)))
 
+    # start  threads
+    for j in jobs:
+        j.start()
+
+    # ensure all threads have been finished
+    for j in jobs:
+        j.join()
