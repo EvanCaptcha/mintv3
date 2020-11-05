@@ -43,8 +43,13 @@ def atc(ses, pid):
             'Quantity': '1'
         }
         response = ses.post('https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Cart-AddProduct', headers=headers, params=params, data=data)
-        if response.text.split('"productid_cart","')[1].split('"]);')[0] == pid:
-            completeAtc = True
+        try:
+            if response.text.split('"productid_cart","')[1].split('"]);')[0] == pid:
+                completeAtc = True
+        except:
+            print("ATC error... Retrying")
+            time.sleep(1)
+            pass
 
 def validate(ses):
     print("Validating cart limit... ")
@@ -189,15 +194,23 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
             time.sleep(2.5)
         elif 'Thank you for your order' in response.text:
             print("Possible successful checkout!")
+            file = open('checkouts.txt', 'a')
             webhook = DiscordWebhook(url='https://discord.com/api/webhooks/772848524437487667/xj3K-_QD3iaOaDAUCnEbpv4zraPJkckjMf71FArHEYcNqc4aLEi-5xEW_uMub8nI5RmZ')
             # create embed object for webhook
             orderNum = 'USM' + response.text.split('<span class="value">USM')[1].split('</span>')[0]
+            file.write(email + ':' + orderNum + '\n')
             embed = DiscordEmbed(title='evxn.net | USMint V3', description=f'Succesful checkout logged. \nOrder Number: ' + orderNum + '\nEmail used: ' + email, color=242424)
             embed.set_footer(text='Programmed in Python by Evan')
             # add embed object to webhook
             webhook.add_embed(embed)
             webhook.execute()
             checkedOut = True
+        else:
+            line = random.choice(open('proxies.txt').readlines()).replace('\n', "")
+            IP = line.split(":")[0]
+            port = line.split(":")[1]
+            proxies = {'https': f'https://{IP}:{port}'}
+            ses.proxies.update(proxies)
 
 def monitor(pid):
     webhook = DiscordWebhook(url='https://discord.com/api/webhooks/772848524437487667/xj3K-_QD3iaOaDAUCnEbpv4zraPJkckjMf71FArHEYcNqc4aLEi-5xEW_uMub8nI5RmZ')
@@ -235,6 +248,11 @@ def task(pid):
             phone = random_with_N_digits(10)
             lName = names.get_last_name()
             s = cfscrape.create_scraper(ses)
+            line = random.choice(open('proxies.txt').readlines()).replace('\n', "")
+            IP = line.split(":")[0]
+            port = line.split(":")[1]
+            proxies = {'https': f'https://{IP}:{port}'}
+            s.proxies.update(proxies)
             atc(s, pid)
             values = getValues(s)
             billSecure = values[0]
