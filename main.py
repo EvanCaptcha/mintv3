@@ -229,7 +229,7 @@ def monitor(pid):
         webhook.add_embed(embed)
         webhook.execute()
 def task(pid):
-    for x in range(1):
+    while True:
         try:
             ses = requests.session()
             addyNum = '21'
