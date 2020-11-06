@@ -11,6 +11,8 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 #USmint bot V3 lets gooooo
 
 
+
+
 def atc(ses, pid):
     completeAtc = False
     while not completeAtc:
@@ -121,6 +123,7 @@ def setInfo1(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, ema
 
 
 def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, email):
+
     print("Setting card and billing...")
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0',
@@ -132,6 +135,8 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
         'Connection': 'keep-alive',
         'TE': 'Trailers',
     }
+    res = ses.get('https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/COShipping-SelectShippingMethod?shippingMethodID=NextDay48AKHI', headers=headers)
+    print(res.text)
 
     data = [
         ('dwfrm_singleshipping_shippingAddress_useAsBillingAddress', 'true'),
@@ -163,6 +168,7 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
     ]
 
     response = ses.post(f'https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Cart-Show/{cartId}', headers=headers, data=data)
+    print(response.text)
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -272,14 +278,14 @@ def task(pid):
             email = random_string_generator(7, chars).lower() + domains[randint(0, 3)]
             setInfo1(s, billSecure, shipSecure, cartID, fName, lName, addy, phone, email)
             setCardBill(s, billSecure, shipSecure, cartID, fName, lName, addy, phone, email)
-        except:
+        except Exception as e:
+            print(e)
             print("An error was encountered during the checkout process. It has been restarted and will be bruteforced until success.")
             pass
 
 def main():
     pid = input("What is the PID of the product?\n")
     threads = input("How many threads do you want to run?\n")
-    monitor(pid)
     jobs = []
     for i in range(0, int(threads)):
         t = jobs.append(threading.Thread(target=task, args=(pid,)))
