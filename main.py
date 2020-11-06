@@ -213,13 +213,23 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
             ses.proxies.update(proxies)
 
 def monitor(pid):
+    global json
     webhook = DiscordWebhook(url='https://discord.com/api/webhooks/772848524437487667/xj3K-_QD3iaOaDAUCnEbpv4zraPJkckjMf71FArHEYcNqc4aLEi-5xEW_uMub8nI5RmZ')
     print("Monitoring " + pid + "...")
-    response = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}")
-    json = response.json()
-    while json['status'] == 'NOT_AVAILABLE':
-        print("Monitoring...")
-        json = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}").json()
+    try:
+        response = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}")
+        json = response.json()
+        status = json['status']
+    except:
+        status = 'NOT_AVAILABLE'
+        pass
+
+    while status == 'NOT_AVAILABLE':
+        try:
+            print("Monitoring...")
+            json = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}").json()
+        except:
+            pass
     else:
         print("Stock detected on product " + pid + " is " + json['ats'])
         # create embed object for webhook
