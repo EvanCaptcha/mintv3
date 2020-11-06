@@ -88,7 +88,7 @@ def setInfo1(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, ema
 
     params = (
         ('avsdata',
-         '{"firstname":"' + fName + '","lastname":"' + lName + '","address1":"' + addy + '","address2":"","city":"Union Pier","postalCode":"49129","state":"MI","country":"US"}'),
+         '{"firstname":"' + fName + '","lastname":"' + lName + '","address1":"' + addy + '","address2":"","city":"Bergenfield","postalCode":"07621","state":"NJ","country":"US"}'),
     )
 
     response = ses.get('https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/AVS-ajax', headers=headers, params=params)
@@ -101,9 +101,9 @@ def setInfo1(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, ema
         'dwfrm_billing_billingAddress_emailsource': 'Website - Checkout',
         'dwfrm_singleshipping_shippingAddress_addressFields_address1': f'{addy}',
         'dwfrm_singleshipping_shippingAddress_addressFields_address2': '',
-        'dwfrm_singleshipping_shippingAddress_addressFields_city': 'UNION PIER',
-        'dwfrm_singleshipping_shippingAddress_addressFields_states_state': 'MI',
-        'dwfrm_singleshipping_shippingAddress_addressFields_zip': '49129',
+        'dwfrm_singleshipping_shippingAddress_addressFields_city': 'BERGENFIELD',
+        'dwfrm_singleshipping_shippingAddress_addressFields_states_state': 'NJ',
+        'dwfrm_singleshipping_shippingAddress_addressFields_zip': '07621',
         'dwfrm_singleshipping_shippingAddress_addressFields_country': 'US',
         'dwfrm_singleshipping_shippingAddress_isCreateAccountSelected': 'false',
         'dwfrm_singleshipping_createAccount_password': '',
@@ -140,9 +140,9 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
         ('dwfrm_billing_billingAddress_addressFields_lastName', f'{lName}'),
         ('dwfrm_billing_billingAddress_addressFields_address1', f'{addy}'),
         ('dwfrm_billing_billingAddress_addressFields_address2', ''),
-        ('dwfrm_billing_billingAddress_addressFields_city', 'UNION PIER'),
-        ('dwfrm_billing_billingAddress_addressFields_states_state', 'MI'),
-        ('dwfrm_billing_billingAddress_addressFields_zip', '49129'),
+        ('dwfrm_billing_billingAddress_addressFields_city', 'BERGENFIELD'),
+        ('dwfrm_billing_billingAddress_addressFields_states_state', 'NJ'),
+        ('dwfrm_billing_billingAddress_addressFields_zip', '07621'),
         ('dwfrm_billing_billingAddress_addressFields_country', 'US'),
         ('dwfrm_billing_billingAddress_addressFields_phone', f'{phone}'),
         ('dwfrm_billing_billingAddress_email_emailAddress', f'{email}'),
@@ -153,12 +153,12 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
         ('format', 'ajax'),
         ('dwfrm_billing_applyBillingAndPayment', ''),
         ('dwfrm_billing_paymentMethods_selectedPaymentMethodID', 'CREDIT_CARD'),
-        ('dwfrm_billing_paymentMethods_creditCard_type', 'Master'),
-        ('dwfrm_billing_paymentMethods_creditCard_owner', 'Enrique Arana'),
-        ('dwfrm_billing_paymentMethods_creditCard_number', '5424181299339544'),
-        ('dwfrm_billing_paymentMethods_creditCard_month', '07'),
-        ('dwfrm_billing_paymentMethods_creditCard_year', '2022'),
-        ('dwfrm_billing_paymentMethods_creditCard_cvn', '217'),
+        ('dwfrm_billing_paymentMethods_creditCard_type', 'Visa'),
+        ('dwfrm_billing_paymentMethods_creditCard_owner', 'Shalom Tuchman'),
+        ('dwfrm_billing_paymentMethods_creditCard_number', '4147202292745559'),
+        ('dwfrm_billing_paymentMethods_creditCard_month', '01'),
+        ('dwfrm_billing_paymentMethods_creditCard_year', '2025'),
+        ('dwfrm_billing_paymentMethods_creditCard_cvn', '200'),
         ('dwfrm_emailsignup_phone', ''),
     ]
 
@@ -176,11 +176,11 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
 
     data = {
         'dwfrm_billing_paymentMethods_selectedPaymentMethodID': 'CREDIT_CARD',
-        'dwfrm_billing_paymentMethods_creditCard_type': 'Master',
-        'dwfrm_billing_paymentMethods_creditCard_owner': 'Enrique Arana',
-        'dwfrm_billing_paymentMethods_creditCard_number': '*'*12 + '9544',
-        'dwfrm_billing_paymentMethods_creditCard_month': '07',
-        'dwfrm_billing_paymentMethods_creditCard_year': '2022',
+        'dwfrm_billing_paymentMethods_creditCard_type': 'Visa',
+        'dwfrm_billing_paymentMethods_creditCard_owner': 'Shalom Tuchman',
+        'dwfrm_billing_paymentMethods_creditCard_number': '*'*12 + '5559',
+        'dwfrm_billing_paymentMethods_creditCard_month': '01',
+        'dwfrm_billing_paymentMethods_creditCard_year': '2025',
         'dwfrm_billing_paymentMethods_creditCard_cvn': '***',
         'dwfrm_billing_securekey': f'{billSecure}',
         'dwfrm_emailsignup_phone': ''
@@ -213,13 +213,23 @@ def setCardBill(ses, billSecure, shipSecure, cartId, fName, lName, addy, phone, 
             ses.proxies.update(proxies)
 
 def monitor(pid):
+    global json
     webhook = DiscordWebhook(url='https://discord.com/api/webhooks/772848524437487667/xj3K-_QD3iaOaDAUCnEbpv4zraPJkckjMf71FArHEYcNqc4aLEi-5xEW_uMub8nI5RmZ')
     print("Monitoring " + pid + "...")
-    response = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}")
-    json = response.json()
-    while json['status'] == 'NOT_AVAILABLE':
-        print("Monitoring...")
-        json = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}").json()
+    try:
+        response = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}")
+        json = response.json()
+        status = json['status']
+    except:
+        status = 'NOT_AVAILABLE'
+        pass
+
+    while status == 'NOT_AVAILABLE':
+        try:
+            print("Monitoring...")
+            json = requests.get(f"https://catalog.usmint.gov/on/demandware.store/Sites-USM-Site/default/Product-GetAvailability?pid={pid}").json()
+        except:
+            pass
     else:
         print("Stock detected on product " + pid + " is " + json['ats'])
         # create embed object for webhook
