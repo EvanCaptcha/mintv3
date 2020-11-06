@@ -279,6 +279,7 @@ def task(pid):
 def main():
     pid = input("What is the PID of the product?\n")
     threads = input("How many threads do you want to run?\n")
+    monitor(pid)
     jobs = []
     for i in range(0, int(threads)):
         t = jobs.append(threading.Thread(target=task, args=(pid,)))
