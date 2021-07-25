@@ -39,11 +39,11 @@ def submitSignup(email, ses):
     data = {
         'emailsource': 'Website - Registration',
         'dwfrm_profile_customer_firstname': 'Evan',
-        'dwfrm_profile_customer_lastname': 'Wohl',
+        'dwfrm_profile_customer_lastname': '',
         'dwfrm_profile_customer_email': f'{email}',
         'dwfrm_profile_customer_emailconfirm': f'{email}',
-        'dwfrm_profile_login_password': 'Veronica66$',
-        'dwfrm_profile_login_passwordconfirm': 'Veronica66$',
+        'dwfrm_profile_login_password': '',
+        'dwfrm_profile_login_passwordconfirm': '',
         'dwfrm_profile_login_question': '5',
         'dwfrm_profile_login_answer': 'Superman',
         'formAgreement': 'on',
@@ -69,9 +69,9 @@ def setCard(ses):
 
 
     data = {
-        'dwfrm_paymentinstruments_creditcards_newcreditcard_owner': 'Evan Wohl',
+        'dwfrm_paymentinstruments_creditcards_newcreditcard_owner': 'Evan',
         'dwfrm_paymentinstruments_creditcards_newcreditcard_type': 'Visa',
-        'dwfrm_paymentinstruments_creditcards_newcreditcard_number': '4004906766743153',
+        'dwfrm_paymentinstruments_creditcards_newcreditcard_number': '',
         'dwfrm_paymentinstruments_creditcards_newcreditcard_month': '1',
         'dwfrm_paymentinstruments_creditcards_newcreditcard_year': '2025',
         'dwfrm_paymentinstruments_securekey': f'{paymentSecure}'
@@ -115,7 +115,7 @@ def setAddress(ses):
         'dwfrm_profile_address_states_state': 'NY',
         'dwfrm_profile_address_city': 'New York',
         'dwfrm_profile_address_zip': '10001',
-        'dwfrm_profile_address_phone': '6464080997',
+        'dwfrm_profile_address_phone': '',
         'dwfrm_profile_address_isDefaultShipping': 'true',
         'dwfrm_profile_address_isDefaultBilling': 'true',
         'dwfrm_profile_securekey': f'{prof2Secure}'
